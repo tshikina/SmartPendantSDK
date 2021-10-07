@@ -1,0 +1,595 @@
+#
+# Format: TAB separated
+# <test instruction>\t[<expected result>]\t[<comment>]
+# If the line starts with '#', it is handled as comment.
+# If <expected result> is omitted, expected result will be true.
+#===============================================
+[General]
+# COMMENT
+COMMENT 'Comment1'
+COMMENT "Comment2"
+COMMENT	false	# missing required parameter
+
+# SHCKSET
+SHCKSET SSL#(1)
+SHCKSET SSL#(1) AXIS1=10 AXIS2=20 AXIS3=30 AXIS4=40 AXIS5=50 AXIS6=60
+SHCKSET SSL#(B000) AXIS1=500 AXIS2=500 AXIS3=500 AXIS4=500 AXIS5=500 AXIS6=500
+SHCKSET SSL#(I000) AXIS1=I001 AXIS2=I002 AXIS3=I003 AXIS4=I004 AXIS5=I005 AXIS6=I006
+SHCKSET SSL#(D000) AXIS1=D001 AXIS2=D002 AXIS3=D003 AXIS4=D004 AXIS5=D005 AXIS6=D006
+SHCKSET SSL#(8)	false	# invalid value range
+SHCKSET	false	# missing SSL#(1)
+SHCKSET AXIS1=10 AXIS2=20 AXIS3=30 AXIS4=40 AXIS5=50 AXIS6=60	false	# missing SSL#(1)
+
+# SHCKRST
+SHCKRST
+
+# ADVINIT
+ADVINIT
+
+# SKILLSND
+SKILLSND 'Test1 test2'
+SKILLSND ATTR=0 'TEST2 TEST3'
+SKILLSND ATTR=D000 S000
+SKILLSND ATTR=0	false	# missing required parameter
+SKILLSND ATTR=B000 'TEST'	false	# invalid format
+
+# EI
+EI
+EI LEVEL=1
+
+# DI
+DI
+DI LEVEL=1
+
+#===============================================
+[Motion]
+# MOVJ
+MOVJ {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:0}
+MOVJ {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:1} //MOVJ
+MOVJ {f:j,j:[-1.0, -2.0, -3.0, -4.0, -5.0, -6.0],t:2} VJ=10.0
+MOVJ {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:3} VJ=0.1 PL=0 UNTIL IN#(1)=ON ACC=20 DEC=20 //MOVJ
+MOVJ {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:3} VJ=100.0 PL=8 UNTIL IN#(2)=ON ACC=100 DEC=100 //MOVJ
+MOVJ P000
+MOVJ P001 VJ=10 PL=0 UNTIL IN#(1)=ON ACC=20 DEC=20 //MOVJ
+MOVJ P002 VJ=B000 PL=B000 UNTIL IN#(2)=OFF ACC=B000 DEC=B000 //MOVJ
+MOVJ P003 VJ=I000 PL=I000 UNTIL IN#(3)=B000 ACC=I000 DEC=I000 //MOVJ
+MOVJ P004 VJ=D000 PL=D000 ACC=D000 DEC=D000 //MOVJ
+
+# MOVL
+MOVL {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:0}
+MOVL {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:1} //MOVL
+MOVL {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:2} V=0.1 PL=0 UNTIL IN#(1)=ON ACC=20 DEC=20 //MOVL
+MOVL {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:2} V=100.0 PL=8 UNTIL IN#(2)=ON ACC=100 DEC=100 //MOVL
+MOVL {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:3} VR=10.0 CR=100.0 UNTIL IN#(1)=OFF ACC=100 DEC=100 //MOVL
+MOVL {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:3} VMAX=100 //VMAX
+MOVL P000
+
+# MOVC
+MOVC {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:0}
+MOVC {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:1} //MOVC
+MOVC {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:2} V=100.0 PL=0 ACC=20 DEC=20 //MOVC
+MOVC {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:3} VR=10.0 ACC=100 DEC=100 COORD=1 FPT //MOVL
+MOVC P000
+MOVC P001 V=10 PL=0 ACC=20 DEC=20 COORD=1 FPT//test
+
+# MOVS
+MOVS {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:0}
+MOVS {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:1} //MOVS
+MOVS {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:2} V=100.0 PL=0 ACC=20 DEC=20 //MOVS
+MOVS {f:j,j:[1.0, 2.0, 3.0, 4.0, 5.0, 6.0],t:3} VR=10.0 ACC=100 DEC=100 //MOVS
+MOVS P000
+MOVS P001 V=10 PL=0 ACC=20 DEC=20 //test
+
+# IMOV
+IMOV P001
+IMOV P002 V=10 PL=0 BF UNTIL IN#(1)=ON ACC=20 DEC=20 //test
+IMOV P003 VR=10 PL=8 RF UNTIL IN#(1)=OFF ACC=100 DEC=100 //test
+IMOV P004 TF ACC=20 DEC=20 //test
+IMOV P004 V=100 UF#(1)
+
+# SPEED
+SPEED
+SPEED VJ=10.0
+SPEED V=10.0
+SPEED VR=10.0
+SPEED VJ=10.0 V=10.0 VR=10.0
+
+# SFTON
+SFTON P000
+SFTON P001 BF
+SFTON P002 RF
+SFTON P003 TF
+SFTON P004 UF#(1)
+
+# SFTOF
+SFTOF
+
+# MSHIFT
+MSHIFT PX000 BF PX001 PX002
+MSHIFT PX003 UF#(1) PX004 PX005
+MSHIFT PX006 PX007 PX008	false	# missing coordinate frame
+
+# SMOOTH
+SMOOTH ADDRATIO=200
+SMOOTH NEUTRAL
+SMOOTH	false	# missing parameter
+
+#===============================================
+[I/O]
+
+# DOUT
+DOUT OT#(1) ON
+DOUT OT#(2) OFF
+DOUT OT#(3) INVERT
+DOUT OT#(4) B000
+DOUT OG#(5) 100
+DOUT OG#(6) B001
+DOUT OGH#(7) 128
+DOUT OT#(B008) ON
+DOUT OT#(I009) ON
+DOUT OT#(D0010) ON
+DOUT OT#(11) 0	false	# invalid format
+DOUT OG#(12) OFF	false	# invalid format
+DOUT OG#(13) ON	false	# invalid format
+DOUT OG#(14) INVERT	false	# invalid format
+DOUT OGH#(15) OFF	false	# invalid format
+DOUT OGH#(16) ON	false	# invalid format
+DOUT OGH#(17) INVERT	false	# invalid format
+DOUT	false	# invalid format
+DOUT OT(#19)	false	# invalid format
+DOUT ON	false	# invalid format
+
+# DIN
+DIN B000 IN#(1)
+DIN B001 IG#(2)
+DIN B002 OT#(3)
+DIN B003 OG#(4)
+DIN B004 SIN#(5)
+DIN B005 SOUT#(6)
+DIN B006 IN#(B007)
+DIN B007 IN#(I008)
+DIN B008 IN#(D009)
+DIN I009 IN#(10)	false	# invalid format
+DIN D010 IN#(11)	false	# invalid format
+DIN R011 IN#(12)	false	# invalid format
+DIN S012 IN#(13)	false	# invalid format
+DIN P013 IN#(14)	false	# invalid format
+DIN	false	# invalid format
+DIN B015	false	# invalid format
+DIN IN#(17)	false	# invalid format
+
+# PULSE
+PULSE OT#(1)
+PULSE OT#(2) T=0.1
+PULSE OG#(3) 255 T=0.2
+PULSE OG#(4) B002 T=0.3
+PULSE OGH#(5) 1 T=0.4
+PULSE OT#(B006) T=0.5
+PULSE OT#(I007) T=0.6
+PULSE OT#(D008) T=0.7
+PULSE OT#(9) 1 T=0.1	false	# invalid format
+PULSE OG#(10)	false	# invalid format
+PULSE	false	# invalid format
+PULSE T=1.0	false	# invalid format
+PULSE 1 T=2.0	false	# invalid format
+
+# WAIT
+WAIT IN#(1) = ON
+WAIT IN#(2) = OFF T=1.0
+WAIT OT#(3) = ON T=2.0
+WAIT SIN#(4) = ON T=3.0
+WAIT SOUT#(5) = ON T=4.0
+WAIT IG#(6) = 0 T=5.0
+WAIT IG#(7) != 255 T=5.0
+WAIT OG#(8) != B000
+WAIT B009 = 255
+WAIT B010 = B011
+WAIT IN#(B011) = ON
+WAIT IN#(I012) = ON
+WAIT IN#(D013) = ON
+WAIT IN#(14) ON	false	# missing condition
+WAIT IN#(15) =	false	# missing value
+WAIT IN#(16)=ON	false	# invalid format
+WAIT 	false	# missing value
+WAIT IN#(18)	false	# invalid format
+WAIT ON	false	# invalid format
+WAIT =	false	# invalid format
+WAIT = ON	false	# invalid format
+WAIT IN#(22) = B000
+
+
+# AOUT
+AOUT AO#(1) 10.0
+AOUT AO#(2) I001
+AOUT 10.0	false	# missing AO
+AOUT AO#(3)	false	# missing value
+
+#===============================================
+[Math]
+# SET
+SET B001 1
+SET I002 2
+SET D003 3
+SET R004 4.0
+SET S005 'TEST'
+SET P006 P007
+
+SET B000 B001
+SET B000 1
+SET I000 I001
+SET I000 2
+SET D000 D001
+SET D000 3
+SET R000 R001
+SET R000 1.2
+SET S000 S001
+SET S000 'TEST'
+SET P000 P001
+SET OG#(1) IG#(2)
+SET B000 B001 + B002
+SET B000 B001 + B002 - B003 * B004 / B005
+SET B000 (B001 + B002) - B003 * B004 / B005
+SET	false	# missing value
+
+# OTHER
+INC B000
+INC I001
+INC D002
+
+DEC B000
+DEC I001
+DEC D002
+
+ADD B000 0
+ADD I001 1
+ADD D002 2
+ADD R003 0.3
+ADD B004 B005
+ADD B006 I007
+ADD B008 D009
+ADD B010 R011
+ADD P012 P013
+
+SUB B000 0
+SUB I001 1
+SUB D002 2
+SUB R003 0.3
+SUB B004 B005
+SUB B006 I007
+SUB B008 D009
+SUB B010 R011
+SUB P012 P013
+
+MUL B000 0
+MUL I001 1
+MUL D002 2
+MUL R003 0.3
+MUL P004 4
+MUL P005 (1) 5
+MUL P006 (2) D006
+MUL B007 B000
+MUL B008 I001
+MUL B009 D002
+MUL B010 R003
+MUL B011 (1) 7	false	# invalid format
+MUL P012 B000	false	# invalid format
+MUL P013 I002	false	# invalid format
+MUL P014 R003	false	# invalid format
+MUL	false	# invalid format
+MUL B000	false	# invalid format
+
+DIV B000 1
+DIV I001 1
+DIV D002 2
+DIV R003 0.3
+DIV P004 4
+DIV P005 (1) 5
+DIV P006 (2) D006
+DIV B007 B000
+DIV B008 I001
+DIV B009 D002
+DIV B010 R003
+DIV B011 (1) 7	false	# invalid format
+DIV P012 B000	false	# invalid format
+DIV P013 I002	false	# invalid format
+DIV P014 R003	false	# invalid format
+DIV	false	# invalid format
+DIV B000	false	# invalid format
+
+CLEAR B000 1
+CLEAR I001 2
+CLEAR D002 3
+CLEAR R003 4
+CLEAR STACK
+CLEAR STACK 1	false	# invalid format
+CLEAR P000 1	false	# invalid format
+CLEAR B000 B000	false	# invalid format
+CLEAR	false	# invalid format
+
+CNVRT PX000 PX001	false	# coord is required
+CNVRT PX002 PX003 BF TL#(4)
+CNVRT PX003 PX004 RF
+CNVRT PX004 PX005 TF
+CNVRT PX005 PX006 UF#(7)
+CNVRT PX006 PX007 UF#(B000)
+CNVRT PX007 PX008 UF#(I000)
+CNVRT PX008 PX009 UF#(D000)
+CNVRT PX009 PX010 RF TL#(11)
+CNVRT PX010 PX011 BF TL#(B000)
+CNVRT PX011 PX012 TF TL#(I000)
+CNVRT PX012 PX013 UF#(14) TL#(D000)
+CNVRT	false	# invalid format
+CNVRT PX014	false	# invalid format
+CNVRT P015 PX016	false	# PX is required
+CNVRT PX016 P017	false	# PX is required
+
+AND B001 B002
+AND	false	# invalid format
+AND B001	false	# invalid format
+AND I001 I001	false	# invalid format
+AND D001 D001	false	# invalid format
+AND R001 R001	false	# invalid format
+
+OR B001 B002
+OR	false	# invalid format
+OR B001	false	# invalid format
+OR I001 I001	false	# invalid format
+OR D001 D001	false	# invalid format
+OR R001 R001	false	# invalid format
+
+NOT B001 B002
+NOT	false	# invalid format
+NOT B001	false	# invalid format
+NOT I001 I001	false	# invalid format
+NOT D001 D001	false	# invalid format
+NOT R001 R001	false	# invalid format
+
+XOR B001 B002
+XOR	false	# invalid format
+XOR B001	false	# invalid format
+XOR I001 I001	false	# invalid format
+XOR D001 D001	false	# invalid format
+XOR R001 R001	false	# invalid format
+
+SETE P000 (1) 20
+SETE P001 (2) D003
+SETE P002 (B003) D004
+SETE P003 4 50	false	# invalid format
+SETE P004 60	false	# invalid format
+SETE	false	# invalid format
+SETE (7) 80	false	# invalid format
+
+GETE D000 P001 (2)
+GETE D001 P002 (B003)
+GETE D002 P003	false	# invalid format
+GETE P004 D005 (6)	false	# invalid format
+GETE D005 (6)	false	# invalid format
+GETE	false	# invalid format
+
+GETS PX000 $PX001
+GETS B001 $B002
+GETS I002 $I003
+GETS D003 $D004
+GETS B004 $RV
+GETS I005 $RV
+GETS D006 $RV
+GETS R007 $RV
+GETS S008 $RV
+GETS P009 $PX010	false	# invalid format
+GETS PX010 PX011	false	# invalid format
+GETS PX011 $RV	false	# invalid format
+GETS	false	# invalid format
+GETS $RV	# invalid format
+GETS B014	# invalid format
+
+SQRT R000 1.0
+SQRT R001 R002
+SQRT	false	# invalid format
+SQRT R003	# invalid format
+SQRT B004 B005	# invalid format
+SQRT I005 I006	# invalid format
+SQRT D006 D007	# invalid format
+SQRT S007 S008	# invalid format
+SQRT P008 P009	# invalid format
+
+COS R000 1.0
+COS R001 R002
+COS	false	# invalid format
+COS R003	# invalid format
+COS B004 B005	# invalid format
+COS I005 I006	# invalid format
+COS D006 D007	# invalid format
+COS S007 S008	# invalid format
+COS P008 P009	# invalid format
+
+SIN R000 1.0
+SIN R001 R002
+SIN	false	# invalid format
+SIN R003	# invalid format
+SIN B004 B005	# invalid format
+SIN I005 I006	# invalid format
+SIN D006 D007	# invalid format
+SIN S007 S008	# invalid format
+SIN P008 P009	# invalid format
+
+ATAN R000 1.0
+ATAN R001 R002
+ATAN	false	# invalid format
+ATAN R003	# invalid format
+ATAN B004 B005	# invalid format
+ATAN I005 I006	# invalid format
+ATAN D006 D007	# invalid format
+ATAN S007 S008	# invalid format
+ATAN P008 P009	# invalid format
+
+MULMAT P001 P002 P003
+MULMAT	false
+MULMAT P003	false	# invalid format
+MULMAT P004 P005	false	# invalid format
+MULMAT B001 B002 B003	false	# invalid format
+MULMAT I001 I002 I003	false	# invalid format
+MULMAT D001 D002 D003	false	# invalid format
+MULMAT R001 R002 R003	false	# invalid format
+MULMAT S001 S002 S003	false	# invalid format
+
+INVMAT P000 P001
+INVMAT	false	# invalid format
+INVMAT P002	false	# invalid format
+INVMAT B003 B004	false	# invalid format
+INVMAT I003 I004	false	# invalid format
+INVMAT D003 D004	false	# invalid format
+INVMAT R003 R004	false	# invalid format
+INVMAT S003 S004	false	# invalid format
+
+GETPOS PX000 STEP#(1)
+GETPOS PX001 STEP#(B002)
+GETPOS PX002 STEP#(I003)
+GETPOS PX003 STEP#(D004)
+GETPOS	false	# invalid format
+GETPOS PX005	false	# invalid format
+GETPOS STEP#(7)	false	# invalid format
+GETPOS P007 STEP#(8)	false	# invalid format
+GETPOS B008 STEP#(9)	false	# invalid format
+GETPOS I009 STEP#(10)	false	# invalid format
+GETPOS D010 STEP#(11)	false	# invalid format
+GETPOS R011 STEP#(12)	false	# invalid format
+GETPOS S012 STEP#(13)	false	# invalid format
+GETPOS PX013 STEP#(R014)	false	# invalid format
+GETPOS PX014 STEP#(S015)	false	# invalid format
+
+
+STRSTR B000 S001 'TEST'
+STRSTR B001 S002 S003
+STRSTR 	false	# invalid format
+STRSTR B003	false	# invalid format
+STRSTR S005	false	# invalid format
+STRSTR 'TEST'	false	# invalid format
+STRSTR S007 'TEST'	false	# invalid format
+STRSTR B007 'TEST'	false	# invalid format
+STRSTR B008 S009	false	# invalid format
+STRSTR B009 B010 B011	false	# invalid format
+STRSTR I010 I011 I012	false	# invalid format
+STRSTR D011 D012 D013	false	# invalid format
+STRSTR R012 R013 R014	false	# invalid format
+STRSTR S013 S014 S015	false	# invalid format
+STRSTR P014 P015 P016	false	# invalid format
+
+
+#===============================================
+[Control]
+# LABEL
+LABEL *TEST1
+LABEL TEST2	false
+LABEL	false	# invalid format
+LABEL B001	false	# invalid format
+
+# JUMP
+JUMP *TEST1
+JUMP TEST2	false	# invalid format
+JUMP	false	# invalid format
+JUMP B001	false	# invalid format
+
+# CALL
+CALL JOB:LONGJOB
+CALL JOB:LONGJOB (B000, I001, D002, R003, S004, P005, 6, "TEST7")
+CALL JOB:	false	# invalid format
+CALL	false	# invalid format
+CALL JOB:LONGJOB ()	false	# invalid format
+CALL JOB:LONGJOB (0,1,2,3,4,5,6,7,8)	false	# invalid format
+CALL (0,1,2,3,4,5,6,7)	false	# invalid format
+
+
+# GETARG
+GETARG B000 IARG#(1)
+GETARG I001 IARG#(2)
+GETARG D002 IARG#(3)
+GETARG R003 IARG#(4)
+GETARG S004 IARG#(5)
+GETARG P005 IARG#(6)
+GETARG B006 IARG#(B001)
+GETARG B007 IARG#(I002)
+GETARG B008 IARG#(D003)
+GETARG	false	# invalid format
+GETARG B010	false	# invalid format
+GETARG IARG#(12)	false	# invalid format
+GETARG B012 IARG#(R013)	false	# invalid format
+GETARG B013 IARG#(S014)	false	# invalid format
+GETARG B014 IARG#(P015)	false	# invalid format
+
+
+# RET
+RET
+RET 1
+RET B002
+RET I003
+RET D004
+RET R005
+RET S006
+RET 'TEST7'
+RET P008	false	# invalid format
+
+# TIMER
+TIMER T=0.01
+TIMER T=I001
+TIMER	false	# invalid format
+TIMER T=B003	false	# invalid format
+TIMER T=D004	false	# invalid format
+TIMER T=R005	false	# invalid format
+TIMER T=S006	false	# invalid format
+TIMER T=P007	false	# invalid format
+
+# PAUSE
+PAUSE
+
+# ABORT
+ABORT
+
+# SETUALM
+SETUALM 8001 'TEST ALARM2' 1
+SETUALM 8002 'TEST ALARM4' 3 SMODE=0
+SETUALM I003 S004 B005 SMODE=B006
+SETUALM 	false	# invalid format
+SETUALM 8005	false	# invalid format
+SETUALM 8006 'TEST ALARM7'	false	# invalid format
+SETUALM 8007 'TEST ALARM8'	false	# missing sub code
+SETUALM 8008 'TEST ALARM9' SMODE=1	false	# missing sub code
+SETUALM B009 B009 B009 SMODE=B009	false	# invalid format
+SETUALM I010 I010 I010 SMODE=I010	false	# invalid format
+SETUALM D011 D011 D011 SMODE=D011	false	# invalid format
+SETUALM R012 R012 R012 SMODE=R012	false	# invalid format
+SETUALM S013 S013 S013 SMODE=S013	false	# invalid format
+SETUALM P014 P014 P014 SMODE=P014	false	# invalid format
+
+
+# PSTART
+PSTART JOB:IFTHEN SUB1
+PSTART JOB:IFTHEN	false	# missing task number
+
+# PWAIT
+PWAIT SUB1
+PWAIT	false # missing task number
+
+# TSYNC
+TSYNC 1
+TSYNC 3 SNUM=4
+TSYNC	false # missing sync number
+TSYNC SNUM=2	false # missing sync number
+
+# IFTHEN
+IFTHEN IN#(1)=ON
+IFTHEN IN#(1)=ON AND IN#(2)=ON OR IN#(3)=ON
+IFTHEN (B001=0 AND I002=B001) OR (D000=20 AND R001=0.01 AND S001='test string')
+
+#===============================================
+[Macro]
+MACRO MJ#(0)	false	# no argument
+MACRO MJ#(0) (1, 2)	false # few argument
+MACRO MJ#(0) (1, 0, 'WIDTH')
+MACRO IMPON-R1 (1, 0, 'WIDTH')
+MACRO IMPON-R1 (1, 2, 3, 4)	false	# too many argument
+MACRO IMPOFFR1
+MACRO IMPOFFR1 (1)	false # too many argument
+
+
+
+

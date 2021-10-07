@@ -1,0 +1,160 @@
+UtilWindow : Utility {
+
+    expandCollapseResize: false
+    expandedSize: [Const.FullWidth, 696]
+    collapsedSize: [Const.FullWidth,652]
+
+    Column {
+        spacing: 8
+        // use full Utility window width, except for 2 x 24pixel margins
+        width: parent.width - 48
+
+        TabBar {
+            id: toptabs
+
+            TabButton {
+                id: generalTabButton
+                text: "General"
+            }
+
+            TabButton { 
+                id: motionTabButton
+                text: "Motion"
+            }
+
+            TabButton { 
+                id: ioTabButton
+                text: "I/O" 
+            }
+
+            TabButton { 
+                id: mathTabButton
+                text: "Math" 
+            }
+
+            TabButton { 
+                id: controlTabButton
+                text: "Control"
+            }
+
+            TabButton {
+                id: macroTabButton
+                text: "Macro"
+            }
+        }
+
+        Row {
+            align: Const.Center
+            
+            TextField {
+                id: beginTextField
+                label: "Begin"
+                width: 100
+                numericInput: true
+                decimalPlaces: 0
+                lowerBound: 0
+                text: "-1"
+            }
+
+            TextField {
+                id: endTextField
+                label: "End"
+                width: 100
+                numericInput: true
+                decimalPlaces: 0
+                lowerBound: 0
+                text: "-1"
+            }
+
+            Button {
+                id: testInstructionButton
+                requiredMode: Const.Manual
+                requiredAccess: Const.Editing
+                text: "Test"
+            }
+
+            Button {
+                id: testPageButton
+                requiredMode: Const.Manual
+                requiredAccess: Const.Editing
+                text: "Test Page"
+            }
+
+            Button {
+                id: prevPageButton
+                text: " < "
+            }
+
+            Text {
+                id: pageText
+                text: "1 / 1"
+            }
+
+            Button {
+                id: nextPageButton
+                text: " > "
+            }
+
+            Button {
+                id: clearResultButton
+                requiredMode: Const.Manual
+                requiredAccess: Const.Editing
+                text: "Clear"
+            }
+
+
+        }
+
+        Row {
+            Text {
+                width: 24
+                text: "No."
+            }
+            Text {
+                width: 520
+                text: "Instruction"
+            }
+            Text {
+                width: 50
+                text: "Expected"
+            }
+            Text {
+                width: 50
+                text: "Result"
+            }
+            Text {
+                width: 50
+                text: "Test"
+            }
+        }
+
+        Row {
+            Text {
+                id: lineNoText
+                width: 24
+            }
+            Text {
+                id: instructionText
+                width: 520
+            }
+            Text {
+                id: expectedText
+                width: 50
+            }
+            Text {
+                id: actualText
+                width: 50
+            }
+            Text {
+                id: resultText
+                width: 50
+            }
+        }
+    }
+
+    Text {
+        id: currentTestLineText
+        text: ""
+    }
+
+}
