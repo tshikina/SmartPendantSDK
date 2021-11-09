@@ -174,28 +174,28 @@ PULSE T=1.0	false	# invalid format
 PULSE 1 T=2.0	false	# invalid format
 
 # WAIT
-WAIT IN#(1) = ON
-WAIT IN#(2) = OFF T=1.0
-WAIT OT#(3) = ON T=2.0
-WAIT SIN#(4) = ON T=3.0
-WAIT SOUT#(5) = ON T=4.0
-WAIT IG#(6) = 0 T=5.0
-WAIT IG#(7) != 255 T=5.0
-WAIT OG#(8) != B000
-WAIT B009 = 255
-WAIT B010 = B011
-WAIT IN#(B011) = ON
-WAIT IN#(I012) = ON
-WAIT IN#(D013) = ON
+WAIT IN#(1)=ON
+WAIT IN#(2)=OFF T=1.0
+WAIT OT#(3)=ON T=2.0
+WAIT SIN#(4)=ON T=3.0
+WAIT SOUT#(5)=ON T=4.0
+WAIT IG#(6)=0 T=5.0
+WAIT IG#(7)!=255 T=5.0
+WAIT OG#(8)!=B000
+WAIT B009=255
+WAIT B010=B011
+WAIT IN#(B011)=ON
+WAIT IN#(I012)=ON
+WAIT IN#(D013)=ON
 WAIT IN#(14) ON	false	# missing condition
-WAIT IN#(15) =	false	# missing value
-WAIT IN#(16)=ON	false	# invalid format
+WAIT IN#(15)=	false	# missing value
+WAIT IN#(16)==ON	false	# invalid format
 WAIT 	false	# missing value
 WAIT IN#(18)	false	# invalid format
 WAIT ON	false	# invalid format
 WAIT =	false	# invalid format
-WAIT = ON	false	# invalid format
-WAIT IN#(22) = B000
+WAIT =ON	false	# invalid format
+WAIT IN#(22)=B000
 
 
 # AOUT
@@ -491,7 +491,7 @@ JUMP B001	false	# invalid format
 
 # CALL
 CALL JOB:LONGJOB
-CALL JOB:LONGJOB (B000, I001, D002, R003, S004, P005, 6, "TEST7")
+CALL JOB:LONGJOB (B000, I001, D002, R003, S004, 5, "TEST6", P007)
 CALL JOB:	false	# invalid format
 CALL	false	# invalid format
 CALL JOB:LONGJOB ()	false	# invalid format
@@ -500,21 +500,27 @@ CALL (0,1,2,3,4,5,6,7)	false	# invalid format
 
 
 # GETARG
-GETARG B000 IARG#(1)
-GETARG I001 IARG#(2)
-GETARG D002 IARG#(3)
-GETARG R003 IARG#(4)
-GETARG S004 IARG#(5)
-GETARG P005 IARG#(6)
-GETARG B006 IARG#(B001)
-GETARG B007 IARG#(I002)
-GETARG B008 IARG#(D003)
+GETARG LB000 IARG#(1)
+GETARG LI000 IARG#(2)
+GETARG LD000 IARG#(3)
+GETARG LR000 IARG#(4)
+GETARG LS000 IARG#(5)
+GETARG LP000 IARG#(6)
+GETARG LB000 IARG#(B001)
+GETARG LB000 IARG#(I002)
+GETARG LB000 IARG#(D003)
 GETARG	false	# invalid format
 GETARG B010	false	# invalid format
 GETARG IARG#(12)	false	# invalid format
-GETARG B012 IARG#(R013)	false	# invalid format
-GETARG B013 IARG#(S014)	false	# invalid format
-GETARG B014 IARG#(P015)	false	# invalid format
+GETARG LB000 IARG#(R013)	false	# invalid format
+GETARG LB000 IARG#(S014)	false	# invalid format
+GETARG LB000 IARG#(P015)	false	# invalid format
+GETARG B000 IARG#(16)	false	# not local var
+GETARG I000 IARG#(17)	false	# not local var
+GETARG D000 IARG#(18)	false	# not local var
+GETARG R000 IARG#(19)	false	# not local var
+GETARG S000 IARG#(20)	false	# not local var
+GETARG P000 IARG#(21)	false	# not local var
 
 
 # RET
@@ -584,8 +590,8 @@ IFTHEN (B001=0 AND I002=B001) OR (D000=20 AND R001=0.01 AND S001='test string')
 [Macro]
 MACRO MJ#(0)	false	# no argument
 MACRO MJ#(0) (1, 2)	false # few argument
-MACRO MJ#(0) (1, 0, 'WIDTH')
-MACRO IMPON-R1 (1, 0, 'WIDTH')
+MACRO MJ#(0) (1, 0, 2)
+MACRO IMPON-R1 (1, 0, 2)
 MACRO IMPON-R1 (1, 2, 3, 4)	false	# too many argument
 MACRO IMPOFFR1
 MACRO IMPOFFR1 (1)	false # too many argument
