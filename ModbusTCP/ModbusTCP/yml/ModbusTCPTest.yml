@@ -1,0 +1,191 @@
+
+IOValue : Rectangle {
+    property int statusSize: 18
+    property bool statusValue: false
+
+    width: statusSize
+    height: statusSize
+    radius: statusSize/2
+    
+    color: statusValue ? "green" : "white"
+    borderWidth: 1
+    borderColor: "blue"
+}
+
+
+ModbusTCPTest : Utility {
+
+    property int textFieldWidth: 100
+    property bool isModbusConnected: false
+    property bool isStartReadingCoils: false
+    property bool isStartReadingDiscreteInputs: false
+
+    Column {
+        spacing: 20
+
+        Row {
+            align: Const.Center
+
+            TextField {
+                id: modbusIpAddressTextField
+                label: "IP Address"
+                text: "10.0.2.2"
+            }
+            Button {
+                id: modbusConnectButton
+                enabled: !isModbusConnected
+                text: "Connect"
+            }
+            Button {
+                id: modbusDisconnectButton
+                enabled: isModbusConnected
+                text: "Disconnect"
+            }
+        }
+
+        Label { text: "Coils" }
+        Row {
+            align: Const.Center
+
+            TextField {
+                id: coilStartAddressTextField
+                width : textFieldWidth
+                label: "Start Address"
+                text: "0"
+                
+                numericInput: true
+                decimalPlaces: 0
+            }
+
+            IOValue { id: coil1 }
+            IOValue { id: coil2 }
+            IOValue { id: coil3 }
+            IOValue { id: coil4 }
+
+            Button {
+                id: startReadingCoilsButton
+                enabled: isModbusConnected && !isStartReadingCoils
+                text: "Start Read"
+            }
+            Button {
+                id: stopReadingCoilsButton
+                enabled: isModbusConnected && isStartReadingCoils
+                text: "Stop Read"
+            }
+
+            Button {
+                id: invertCoilButton
+                enabled: isModbusConnected
+                text: "Invert"
+            }
+        }
+
+        Label { text: "Discrete Inputs" }
+        Row {
+            align: Const.Center
+
+            TextField {
+                id: discreteInputStartAddressTextField
+                enabled: isModbusConnected
+                width : textFieldWidth
+                label: "Start Address"
+                text: "0"
+
+                numericInput: true
+                decimalPlaces: 0
+            }
+
+            IOValue { id: discreteInputs1 }
+            IOValue { id: discreteInputs2 }
+            IOValue { id: discreteInputs3 }
+            IOValue { id: discreteInputs4 }
+
+            Button {
+                id: startReadingDiscreteInputsButton
+                enabled: isModbusConnected && !isStartReadingDiscreteInputs
+                text: "Start Read"
+            }
+            Button {
+                id: stopReadingDiscreteInputsButton
+                enabled: isModbusConnected && isStartReadingDiscreteInputs
+                text: "Stop Read"
+            }
+
+        }
+
+        Label { text: "Holding Register" }
+        Row {
+            align: Const.Center
+
+            TextField {
+                id: holdingRegisterAddressTextField
+                enabled: isModbusConnected
+                width : textFieldWidth
+                label: "Address"
+                text: "0"
+
+                numericInput: true
+                decimalPlaces: 0
+            }
+
+            TextField {
+                id: holdingRegisterValueTextField
+                enabled: isModbusConnected
+                width : textFieldWidth
+                label: "Value"
+                text: "0"
+
+                numericInput: true
+                decimalPlaces: 0
+            }
+
+            Button {
+                id: readHoldingRegisterButton
+                enabled: isModbusConnected
+                text: "Read"
+            }
+
+            Button {
+                id: writeHoldingRegisterButton
+                enabled: isModbusConnected
+                text: "Write"
+            }
+
+        }
+
+        Label { text: "Input Register" }
+
+        Row {
+            align: Const.Center
+
+            TextField {
+                id: inputRegisterAddressTextField
+                enabled: isModbusConnected
+                width : textFieldWidth
+                label: "Address"
+                text: "0"
+
+                numericInput: true
+                decimalPlaces: 0
+            }
+
+            TextField {
+                id: inputRegisterValueTextField
+                width : textFieldWidth
+                enabled: false
+                label: "Value"
+                text: "0"
+
+                numericInput: true
+                decimalPlaces: 0
+            }
+
+            Button {
+                id: readInputRegisterButton
+                enabled: isModbusConnected
+                text: "Read"
+            }
+
+        }
+    }
+}
