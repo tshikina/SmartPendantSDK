@@ -6,6 +6,7 @@ import java.util.function.*;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.Path;
 import java.nio.ByteBuffer;
 
 import org.apache.thrift.TException;
@@ -400,7 +401,171 @@ public class Pendant
     }
 
 
+    /*
+        Charting API functions
+    */
     
+    /**
+     * Sets the configuration object of a chart by ID. Refer to [TODO] for
+     * documentation on chart configuration options
+     * @param chartID String ID
+     * @param config 
+    */
+    public void setChartConfig(String chartID, Any config)
+            throws IllegalArgument, TException
+    {
+        client.setChartConfig(id, chartID, config);
+    }
+
+    public void setChartConfig(String chartID, Map<String, Object> config)
+            throws IllegalArgument, TException
+    {
+        var m = new HashMap<String,Any>();
+        for(var k : config.keySet()) {
+            m.put(k, Extension.toAny(config.get(k)));
+        }
+        client.setChartConfig(id, chartID, Any.mValue(m));
+    }
+
+    public void setChartData(String chartID, Map<String, Data> dataset)
+            throws IllegalArgument, TException
+    {
+        client.setChartData(id, chartID, dataset, false);
+    }
+
+    public void setChartData(String chartID, Map<String, Data> dataset, boolean right)
+            throws IllegalArgument, TException
+    {
+        client.setChartData(id, chartID, dataset, right);
+    }
+
+    public Map<String, Data> getChartData(String chartID)
+        throws IllegalArgument, TException
+    {
+        return client.getChartData(id, chartID, false);
+    }
+
+    public Map<String, Data> getChartData(String chartID, boolean right)
+        throws IllegalArgument, TException
+    {
+        return client.getChartData(id, chartID, right);
+    }
+
+    public void addChartKey(String chartID, String key, Data data)
+            throws IllegalArgument, TException
+    {
+        client.addChartKey(id, chartID, key, data, false);
+    }
+
+    public void addChartKey(String chartID, String key, Data data, boolean right)
+            throws IllegalArgument, TException
+    {
+        client.addChartKey(id, chartID, key, data, right);
+    }
+    
+    public void removeChartKey(String chartID, String key)
+            throws IllegalArgument, TException
+    {
+        client.removeChartKey(id, chartID, key, false);
+    }
+
+    public void removeChartKey(String chartID, String key, boolean right)
+            throws IllegalArgument, TException
+    {
+        client.removeChartKey(id, chartID, key, right);
+    }
+
+    public void hideChartKey(String chartID, String key)
+            throws IllegalArgument, TException
+    {
+        client.hideChartKey(id, chartID, key, true, false);
+    }
+
+    public void hideChartKey(String chartID, String key, boolean hidden)
+            throws IllegalArgument, TException
+    {
+        client.hideChartKey(id, chartID, key, hidden, false);
+    }
+
+    public void hideChartKey(String chartID, String key, boolean hidden, boolean right)
+            throws IllegalArgument, TException
+    {
+        client.hideChartKey(id, chartID, key, hidden, right);
+    }
+
+    public void appendChartPoint(String chartID, String key, DataPoint pt)
+            throws IllegalArgument, TException
+    {
+        client.appendChartPoints(id, chartID, key, Arrays.<DataPoint>asList(pt), false);
+    }
+
+    public void appendChartPoint(String chartID, String key, DataPoint pt, boolean right)
+            throws IllegalArgument, TException
+    {
+        client.appendChartPoints(id, chartID, key, Arrays.<DataPoint>asList(pt), right);
+    }
+
+    public void appendChartPoints(String chartID, String key, List<DataPoint> pts)
+            throws IllegalArgument, TException
+    {
+        client.appendChartPoints(id, chartID, key, pts, false);
+    }
+
+    public void appendChartPoints(String chartID, String key, List<DataPoint> pts, boolean right)
+            throws IllegalArgument, TException
+    {
+        client.appendChartPoints(id, chartID, key, pts, right);
+    }
+
+    public void incrementChartKey(String chartID, String key)
+            throws IllegalArgument, TException
+    {
+        client.incrementChartKey(id, chartID, key, 1.0);
+    }
+
+    public void decrementChartKey(String chartID, String key)
+            throws IllegalArgument, TException
+    {
+        client.incrementChartKey(id, chartID, key, -1.0);
+    }
+
+    public void incrementChartKey(String chartID, String key, double value)
+            throws IllegalArgument, TException
+    {
+        client.incrementChartKey(id, chartID, key, value);
+    }
+
+    public void decrementChartKey(String chartID, String key, double value)
+            throws IllegalArgument, TException
+    {
+        client.incrementChartKey(id, chartID, key, -value);
+    }
+
+    /*
+    // image export not implemented with C++ charting elements
+    public String exportChartImage(String chartID, String imageFileName)
+            throws IOException, IllegalArgument, TException
+    {
+        String fullImagePath = client.exportChartImage(id, chartID, imageFileName);
+        Path imgPath = Paths.get(fullImagePath);
+        if (!Files.exists(imgPath) || Files.isDirectory(imgPath)) {
+            // read the image and write it locally
+            ByteBuffer imgBuf = client.exportChartImageData(id, chartID, imageFileName);
+            byte [] bytebuf = new byte[imgBuf.remaining()];
+            imgBuf.get(bytebuf);
+            Files.write(Paths.get(imageFileName), bytebuf);
+            return imageFileName;
+        } else {
+            return fullImagePath;
+        }
+    }
+
+    public ByteBuffer exportChartImageData(String chartID, String imageFileName)
+            throws IllegalArgument, TException
+    {
+        return client.exportChartImageData(id, chartID, imageFileName);
+    }
+    */
 
     public void notice(String title, String message, String log) throws TException
     {
@@ -443,7 +608,7 @@ public class Pendant
             client.cancelPopupDialog(id, identifier);
         }
     }
-
+    
     public String insertInstructionAtSelectedLine(String instruction) throws TException
     {
         synchronized(extension) {
@@ -451,7 +616,13 @@ public class Pendant
         }
     }
 
-
+    public void displayScreen(String identifier) throws TException
+    {
+        synchronized(extension) {
+            client.displayScreen(id, identifier);
+        }
+    }
+    
     // Event consumer functions
 
     public synchronized void addEventConsumer(PendantEventType eventType, Consumer<yaskawa.ext.api.PendantEvent> c) throws TException
